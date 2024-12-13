@@ -1,0 +1,25 @@
+class MainActivity : AppCompatActivity() {
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val layout = LinearLayout(this)
+        val text = object: AppCompatEditText(this){
+            override fun onTextChanged(
+                text: CharSequence?,
+                start: Int,
+                lengthBefore: Int,
+                lengthAfter: Int
+            ) {
+                super.onTextChanged(text, start, lengthBefore, lengthAfter)
+                Log.i("text","Inhalt: $text")
+            }
+        }
+
+
+        layout.addView(text)
+        setContentView((layout))
+    }
+
+}

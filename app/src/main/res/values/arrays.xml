@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="wortart_anzeige">
+        <item>Noun</item>
+        <item>Verb</item>
+        <item>Adjective</item>
+        <item>Adverb</item>
+        <item>Idiom</item>
+    </array>
+
+    <string-array name="wordart_werte">
+        <item>Noun</item>
+        <item>Verb</item>
+        <item>Adjective</item>
+        <item>Adverb</item>
+        <item>Idiom</item>
+    </string-array>
+
+
+    <array name="anzeigen_sortierung_anzeige">
+        <item>id ASC</item>
+        <item>id DESC</item>
+    </array>
+
+    <string-array name="anzeigen_sortierung_werte">
+        <item>order by id ASC</item>
+        <item>order by id DESC</item>
+
+    </string-array>
+</resources>
