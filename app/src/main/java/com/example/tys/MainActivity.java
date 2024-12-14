@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity
 
                     for (int i = 0; i < item.length; i++)
                     {
-                        itemArray[i] = item[i] != null ? item[i].toString() : "";
+                        itemArray[i] = item[i] != null ? item[i] : "";
                     }
 
                     Daten daten = new Daten(itemArray[1], itemArray[2], itemArray[3], itemArray[4], itemArray[5], 5);
