@@ -16,12 +16,10 @@
         android:onClick="onAntwortSofortAnzeigen"
         android:text="Antwort sofort anzeigen"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnCheck"
-        app:layout_constraintVertical_bias="0.144" />
+        app:layout_constraintTop_toBottomOf="@+id/btnCheck" />
 
     <Button
         android:id="@+id/btnCheck"
@@ -33,7 +31,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edAntwort" />
+        app:layout_constraintTop_toBottomOf="@+id/tvFrageHinweis" />
 
     <Button
         android:id="@+id/btnHinweisAnzeigen"
@@ -43,8 +41,9 @@
         android:text="Hinweis"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toStartOf="@+id/cbHinweisEin"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edFrageWort" />
+        app:layout_constraintTop_toBottomOf="@+id/tvPosition" />
 
     <Button
         android:id="@+id/btnFrage"
@@ -54,6 +53,7 @@
         android:text="Frage"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rgrpEnglischDeutsch" />
 
@@ -61,13 +61,12 @@
         android:id="@+id/cbHinweisEin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
+        android:layout_marginEnd="16dp"
         android:onClick="onHinweisEinschalten"
         android:text="Ein"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toTopOf="@+id/tvFrageHinweis"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edFrageWort" />
+        app:layout_constraintTop_toBottomOf="@+id/tvPosition" />
 
     <EditText
         android:id="@+id/edFrageWort"
@@ -93,7 +92,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPosition" />
+        app:layout_constraintTop_toBottomOf="@+id/btnHinweisAnzeigen" />
 
     <EditText
         android:id="@+id/tvFrageHinweis"
@@ -103,8 +102,9 @@
         android:inputType="textMultiLine"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnHinweisAnzeigen" />
+        app:layout_constraintTop_toBottomOf="@+id/edAntwort" />
 
     <RadioGroup
         android:id="@+id/rgrpEnglischDeutsch"
@@ -112,7 +112,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/spFilterFrage">
 
         <RadioButton
             android:id="@+id/rbEnglisch"
@@ -121,16 +121,35 @@
             android:checked="true"
             android:onClick="onSpacheGewaehlt"
             android:text="Englisch"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            tools:layout_editor_absoluteX="-1dp"
+            tools:layout_editor_absoluteY="45dp" />
 
         <RadioButton
             android:id="@+id/rbDeutsch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:enabled="true"
             android:onClick="onSpacheGewaehlt"
             android:text="Deutsch"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:visibility="visible"
+            tools:layout_editor_absoluteX="129dp"
+            tools:layout_editor_absoluteY="54dp" />
+
+
     </RadioGroup>
+
+    <Spinner
+        android:id="@+id/spFilterFrage"
+        android:layout_width="291dp"
+        android:layout_height="48dp"
+        android:entries="@array/wordarten"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toStartOf="@+id/tvFilterFrage"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvPosition"
@@ -139,9 +158,8 @@
         android:hint="Kartei"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvFrageHinweis" />
+        app:layout_constraintTop_toBottomOf="@+id/tvWortArtAbfrage" />
 
     <TextView
         android:id="@+id/tvAnzahVersuche"
@@ -151,8 +169,29 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintBottom_toTopOf="@+id/btnFrage"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toEndOf="@+id/rgrpEnglischDeutsch"
+        app:layout_constraintTop_toBottomOf="@+id/spFilterFrage" />
+
+    <TextView
+        android:id="@+id/tvFilterFrage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Filterung"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toTopOf="@+id/rgrpEnglischDeutsch"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvWortArtAbfrage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Wortart"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edFrageWort" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

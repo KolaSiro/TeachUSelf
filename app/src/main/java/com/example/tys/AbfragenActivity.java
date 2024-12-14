@@ -1,12 +1,15 @@
 package com.example.tys;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import static com.example.tys.MainActivity.WORDART_FILTER;
 
 public class AbfragenActivity extends AppCompatActivity
 {
@@ -31,6 +36,7 @@ public class AbfragenActivity extends AppCompatActivity
     private TextView tvVersuche;
     private TextView tvHinweis1;
     private Integer nVersuche = 0;
+    private Spinner spWortArtFilter = null;
     DbConnection db = null;
 
     @Override
@@ -49,7 +55,7 @@ public class AbfragenActivity extends AppCompatActivity
         rbEnglisch = findViewById(R.id.rbEnglisch);
         rbDeutsch = findViewById(R.id.rbDeutsch);
         rbEnglisch.setClickable(true);
-        rbDeutsch.setClickable(true);
+        rbDeutsch.setClickable(false);
         cbHinweisEin = findViewById(R.id.cbHinweisEin);
 
         edAntwort =  findViewById(R.id.edAntwort);
@@ -64,6 +70,57 @@ public class AbfragenActivity extends AppCompatActivity
         btnAntwortAnzeigen.setEnabled(false);
         tvVersuche = findViewById(R.id.tvAnzahVersuche);
         tvHinweis1 = findViewById(R.id.tvFrageHinweis);
+        spWortArtFilter = findViewById(R.id.spFilterFrage);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("MyAppPreferences", MODE_PRIVATE);
+        String sFilter = sharedPreferences.getString(WORDART_FILTER, "");
+        String []anzeigen = getResources().getStringArray(R.array.wordarten);
+        int nIndex = 0;
+
+        for (String s: anzeigen)
+        {
+            if ( s.equals(sFilter))
+            {
+                spWortArtFilter.setSelection(nIndex);
+                break;
+            }
+            nIndex++;
+        }
+
+        spWortArtFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View arg1, int position, long id)
+            {
+                String workRequestType = adapterView.getItemAtPosition(position).toString();
+
+                Object item = adapterView.getItemAtPosition(position);
+
+                if (item != null)
+                {
+                    Toast.makeText(AbfragenActivity.this, workRequestType, Toast.LENGTH_LONG).show();
+
+                    // Anzeige aus Spinner lesen
+                    final String[] anzeige = getResources().getStringArray(R.array.wordarten);
+                    int nPosLookUp = adapterView.getSelectedItemPosition();
+                    final String sWert = anzeige[nPosLookUp];
+
+                    // Anzeige in Preferences schreiben
+                    SharedPreferences sharedPreferences = getSharedPreferences("MyAppPreferences", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(WORDART_FILTER, sWert); // User Wahl in Preferences speichern
+                    editor.commit();
+
+                    onResume();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0)
+            {
+                // TODO Auto-generated method stub
+            }
+        });
     }
 
     public void onSpacheGewaehlt(View view)
@@ -77,7 +134,7 @@ public class AbfragenActivity extends AppCompatActivity
     {
         btnFrage.setEnabled(false);
 
-        item = db.getOneDataSet(this);
+        item = db.getOneDataSetFromWordArt(this);
 
         if (item == null)
         {
@@ -104,13 +161,15 @@ public class AbfragenActivity extends AppCompatActivity
 
         if ( rbEnglisch.isChecked() )
         {
-            edFrage.setText(item.getWort1() == null ? "" : item.getWort1() + " [" + item.getArt() + "]");
+            edFrage.setText(item.getWort1() == null ? "" : item.getWort1() );
         }
         else
         {
-            edFrage.setText(item.getWort2() == null ? "" : item.getWort2()+ " [" + item.getArt() + "]");
+            edFrage.setText(item.getWort2() == null ? "" : item.getWort2());
         }
 
+        TextView tvWortArt = findViewById(R.id.tvWortArtAbfrage);
+        tvWortArt.setText(item.getArt() != null ? item.getArt() : "");
         btnCheck.setEnabled(true);
         btnAntwortAnzeigen.setEnabled(true);
     }

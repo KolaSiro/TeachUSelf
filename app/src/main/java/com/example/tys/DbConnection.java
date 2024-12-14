@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import androidx.annotation.NonNull;
 
@@ -203,21 +204,56 @@ public class DbConnection extends SQLiteOpenHelper
       return daten;
    }
 
-   public Daten getOneDataSet(Context context)
+   public Daten getOneDataSetFromWordArt(Context context)
    {
-//      SELECT foo FROM bar
-//      WHERE id >= (abs(random()) % (SELECT max(id) FROM bar))
-//      LIMIT 1;
+      SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPreferences", MODE_PRIVATE);
+      String sWortArtFilterWert = sharedPreferences.getString(MainActivity.WORDART_FILTER, "");
+
+      String sWhere = ";";
+
+      if (sWortArtFilterWert.length() > 0)
+      {
+         sWhere = " WHERE wordart = '" + sWortArtFilterWert + "';";
+      }
+      String [] sWortArtArray = context.getResources().getStringArray(R.array.wordarten);
+
+      if ( sWortArtArray[0].equalsIgnoreCase(sWortArtFilterWert))
+      {
+         sWhere = ";"; // = NOT_SPECIFIED, d.h. alle Daten
+      }
+
+
+      String sql = "SELECT * FROM TDaten " + sWhere;
+      return getOneDataSet(context, sql);
+   }
+
+   public Daten getOneDataSetFromFragePosition(Context context)
+   {
+      //      SELECT foo FROM bar
+      //      WHERE id >= (abs(random()) % (SELECT max(id) FROM bar))
+      //      LIMIT 1;
 
       // String  sql = "SELECT * FROM TDaten WHERE id >= (abs(random()) %  (SELECT max(id)  FROM TDaten)) LIMIT 1";
       String sql = "SELECT * FROM TDaten order by fragePos;";
 
+      return getOneDataSet(context, sql);
+   }
+
+   public Daten getOneDataSet(Context context, String sql)
+   {
       DbConnection conn = getInstance(context);
       SQLiteDatabase db = conn.getReadableDatabase();
       Cursor cur = db.rawQuery(sql, null);
+
+      int nRowCount = cur.getCount();
+      Random rand = new Random();
+
+      // Generate random integers in range nRowCount
+      int nRndPosition = rand.nextInt(nRowCount);
+
       Daten dat = null;
 
-      while (cur.moveToNext())
+      if ( nRndPosition >= 0 && cur.moveToPosition(nRndPosition) )
       {
          dat = new Daten();
          dat.setId(cur.getInt(0));
@@ -227,8 +263,23 @@ public class DbConnection extends SQLiteOpenHelper
          dat.setHint1(cur.getString(4));
          dat.setHint2(cur.getString(5));
          dat.setFragePos(cur.getInt(6));
-         break;
       }
+      else
+      {
+         while (cur.moveToNext())
+         {
+            dat = new Daten();
+            dat.setId(cur.getInt(0));
+            dat.setWort1(cur.getString(1));
+            dat.setWort2(cur.getString(2));
+            dat.setArt(cur.getString(3));
+            dat.setHint1(cur.getString(4));
+            dat.setHint2(cur.getString(5));
+            dat.setFragePos(cur.getInt(6));
+            break;
+         }
+      }
+
       cur.close();
       return dat;
    }

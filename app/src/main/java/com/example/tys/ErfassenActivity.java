@@ -1,13 +1,11 @@
 package com.example.tys;
 
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -16,11 +14,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+/**
+ * Daten erfassen Dialog
+ */
 public class ErfassenActivity extends AppCompatActivity
 {
     private boolean bNurAendern = false;
     private int nId = -1;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -47,6 +47,20 @@ public class ErfassenActivity extends AppCompatActivity
 
             EditText edDeut = findViewById(R.id.edDeutschErfassen);
             edDeut.setText(extras.getCharSequence(AnzeigenActivity.WORT_DEUTSCH));
+
+            // Wortart auslesen und Spinner setzen
+            Spinner spWortArt = findViewById(R.id.spWordArt);
+            String sWortArt = extras.getCharSequence(AnzeigenActivity.WORT_ART).toString();
+            String [] wortArtenArray = getResources().getStringArray(R.array.wordarten); // Liste mit Wortarten
+
+            for(int i = 0; i < wortArtenArray.length; i++)
+            {
+                if (sWortArt.equalsIgnoreCase(wortArtenArray[i]) )
+                {
+                    spWortArt.setSelection(i);
+                    break;
+                }
+            }
 
             EditText edHin1 = findViewById(R.id.edHinweis1);
             edHin1.setText(extras.getCharSequence(AnzeigenActivity.HINWEIS_1));
@@ -108,7 +122,7 @@ public class ErfassenActivity extends AppCompatActivity
 
         final Spinner spWortArt = findViewById(R.id.spWordArt );
         final int pos = spWortArt.getSelectedItemPosition();
-        final String[] werteArray =  getResources().getStringArray(R.array.wordart_werte);
+        final String[] werteArray =  getResources().getStringArray(R.array.wordarten);
         final String sWortArt = werteArray[pos];
 
         DbConnection db = DbConnection.getInstance(this);
@@ -132,7 +146,7 @@ public class ErfassenActivity extends AppCompatActivity
             else
             {
             long primaryKey = db.insert(this,
-                    new Daten(sValueEngl, sValueDeutsch,  sWortArt == "empty" ? "" : sWortArt , sHin1, sHin2, 5));
+                    new Daten(sValueEngl, sValueDeutsch,  sWortArt, sHin1, sHin2, 5));
                 Toast.makeText(this, "Erfasst: ID=" + primaryKey + " " + sValueEngl + " = " + sValueDeutsch, Toast.LENGTH_SHORT).show();
             }
         }

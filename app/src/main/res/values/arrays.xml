@@ -1,21 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="wortart_anzeige">
-        <item>Noun</item>
-        <item>Verb</item>
-        <item>Adjective</item>
-        <item>Adverb</item>
-        <item>Idiom</item>
-    </array>
+<!--    <array name="wortart_anzeige">-->
+<!--        <item>Not Specified</item>-->
+<!--        <item>Noun</item>-->
+<!--        <item>Verb</item>-->
+<!--        <item>Adjective</item>-->
+<!--        <item>Adverb</item>-->
+<!--        <item>Idiom</item>-->
+<!--        <item>Sentence</item>-->
+<!--    </array>-->
 
-    <string-array name="wordart_werte">
-        <item>Noun</item>
-        <item>Verb</item>
-        <item>Adjective</item>
-        <item>Adverb</item>
-        <item>Idiom</item>
-    </string-array>
+<!--    <string-array name="wordart_werte">-->
+<!--        <item>NOT_SPECIFIED</item>-->
+<!--        <item>NOUN</item>-->
+<!--        <item>VERB</item>-->
+<!--        <item>ADJ</item>-->
+<!--        <item>ADV</item>-->
+<!--        <item>IDIOM</item>-->
+<!--        <item>SENTENCE</item>-->
+<!--    </string-array>-->
 
+    <string-array name="wordarten">
+    <item>NOT_SPECIFIED</item>
+    <item>NOUN</item>
+    <item>VERB</item>
+    <item>ADJECTIVE</item>
+    <item>ADVERB</item>
+    <item>IDIOM</item>
+    <item>SENTENCE</item>
+
+</string-array>
 
     <array name="anzeigen_sortierung_anzeige">
         <item>id ASC</item>
