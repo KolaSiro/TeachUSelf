@@ -35,18 +35,11 @@ public class MainActivity extends AppCompatActivity
     // Datenimport
     private static final int REQUEST_STORAGE_PERMISSION = 1;
 
+    // Datenfilterung anhand von der Wortart
+    public static final String WORDART_FILTER = "WORDART_FILTER";
+
     // Datensortierung
     public static final String ANZEIGE_SORTIERUNG = "ANZEIGE_SORTIERUNG";
-
-    // Wort Arten
-    public static final String NOUN = "Noun"; // Hauptwort
-    public static final String VERB = "Verb"; // Verb
-    public static final String ADJ = "Adjectiv"; // Adjektiv
-    public static final String ADV = "Adverb"; // Adverb
-    public static final String IDIOM = "Idiom"; // Redewendung
-    public static final String EMPTY_ART = "Empty"; // Wortart nicht festgelegt
-    public static final String SENTENCE = "Sen"; // ganzer oder Teilsatz
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -167,13 +160,26 @@ public class MainActivity extends AppCompatActivity
     private void insertTestData(DbConnection db)
     {
         if ( db.getDaten(this, -1).size() > 0)
+        {
             return; // Daten sind schon importiert
+        }
+
         try
         {
-            db.insert(this, new Daten("Hello", "Hallo", EMPTY_ART, "greeting", "Begrüssung", 3));
-            db.insert(this, new Daten("red", "rot", ADJ, "color", "Farbe", 2));
-            db.insert(this, new Daten("green", "grün", ADJ, "color", "Farbe", 1));
-            db.insert(this, new Daten("blue", "blau", ADJ, "color", "Farbe", 5));
+            // Wort Arten
+            final String NOT_SPECIFIED = getResources().getStringArray(R.array.wordarten)[0];
+            final String NOUN = getResources().getStringArray(R.array.wordarten)[1]; // Hauptwort
+            final String VERB = getResources().getStringArray(R.array.wordarten)[2]; // Verb
+            final String ADJECTIVE = getResources().getStringArray(R.array.wordarten)[3]; // Adjektiv
+            final String ADVERB = getResources().getStringArray(R.array.wordarten)[4]; // Adverb
+            final String IDIOM = getResources().getStringArray(R.array.wordarten)[5]; // Redewendung
+            final String SENTENCE = getResources().getStringArray(R.array.wordarten)[6]; // ganzer oder Teilsatz
+
+            // Daten fuer Import, damit die DB am Anfang nicht leer ist.
+            db.insert(this, new Daten("Hello", "Hallo", NOT_SPECIFIED, "greeting", "Begrüssung", 3));
+            db.insert(this, new Daten("red", "rot", ADJECTIVE, "color", "Farbe", 2));
+            db.insert(this, new Daten("green", "grün", ADJECTIVE, "color", "Farbe", 1));
+            db.insert(this, new Daten("blue", "blau", ADJECTIVE, "color", "Farbe", 5));
             db.insert(this, new Daten("table", "Tisch", NOUN, "furniture", "Möbel", 2));
             db.insert(this, new Daten("chair", "Stuhl", NOUN, "furniture", "Möbel", 4));
             db.insert(this, new Daten("lamp", "Lampe", NOUN, "furniture", "Möbel", 2));
@@ -187,11 +193,15 @@ public class MainActivity extends AppCompatActivity
             db.insert(this, new Daten("bread", "Brot", NOUN, "food", "Nahrung", 2));
             db.insert(this, new Daten("bird", "Vogel", NOUN, "animal", "Tier", 3));
             db.insert(this, new Daten("dog", "Hund", NOUN, "animal", "Tier", 2));
-            db.insert(this, new Daten("swift", "schnell", ADJ, "", "", 1));
+            db.insert(this, new Daten("swift", "schnell", ADJECTIVE, "", "", 1));
             db.insert(this, new Daten("striker", "Stürmer", NOUN, "player", "Spieler", 1));
             db.insert(this, new Daten("Bite the bullet", "In den sauren Apfel beissen", IDIOM, "Idiom", "Redewendung", 2));
             db.insert(this, new Daten("Cutting corners", "Am falschen Ende sparen", IDIOM, "Idiom", "Redewendung", 2));
             db.insert(this, new Daten("I am ill", "Ich bin krank", SENTENCE, "", "Gesundheitszustand", 2));
+            db.insert(this, new Daten("now", "jetzt" , ADVERB, "", "Zeitpunkt", 2));
+            db.insert(this, new Daten("yesterday", "gestern" , ADVERB, "", "Zeitpunkt", 2));
+            db.insert(this, new Daten("often", "oft" , ADVERB, "", "Wiederholung", 2));
+            db.insert(this, new Daten("dayly", "täglich" , ADVERB, "", "Zeitpunkt", 2));
         }
         catch( Exception ex)
         {
@@ -245,12 +255,12 @@ public class MainActivity extends AppCompatActivity
                     // Bsp. 1;cool;kühl;ADJ;Themperature;Themperatur
                     String[] item = line.split(";");
                     // Test ob es zuviele Spalten hat
-                    if (item.length >= 6)
+                    if (item.length > 6)
                     {
                         Log.e("TYS", "Import-Zeile hat zu viele Spalten. Max. 6");
                         continue;
                     }
-                    String[] itemArray = {"", "", "", EMPTY_ART, "", ""};
+                    String[] itemArray = {"", "", "", "", "", ""};
 
                     for (int i = 0; i < item.length; i++)
                     {
@@ -293,7 +303,5 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this, "InputStream failed" + ex.getMessage(), Toast.LENGTH_SHORT).show();
             ex.printStackTrace();
         }
-
-
     }
 }
