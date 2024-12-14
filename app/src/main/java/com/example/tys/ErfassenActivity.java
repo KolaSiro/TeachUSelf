@@ -146,7 +146,7 @@ public class ErfassenActivity extends AppCompatActivity
             else
             {
             long primaryKey = db.insert(this,
-                    new Daten(sValueEngl, sValueDeutsch,  sWortArt == "empty" ? "" : sWortArt , sHin1, sHin2, 5));
+                    new Daten(sValueEngl, sValueDeutsch,  sWortArt, sHin1, sHin2, 5));
                 Toast.makeText(this, "Erfasst: ID=" + primaryKey + " " + sValueEngl + " = " + sValueDeutsch, Toast.LENGTH_SHORT).show();
             }
         }
