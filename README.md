@@ -1,3 +1,5 @@
+- TEACH YOU SELF
+- ==============
 - Android Studio Project
 - SDK 34
 - Programming in Java
