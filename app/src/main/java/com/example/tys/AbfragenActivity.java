@@ -6,12 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,10 +32,10 @@ public class AbfragenActivity extends AppCompatActivity
     private Button btnHinweis = null;
     private Button btnFrage = null;
     private Button btnAntwortAnzeigen = null;
-    private CheckBox cbHinweisEin = null;
     private EditText edAntwort ;
     private TextView tvVersuche;
     private TextView tvHinweis1;
+    private TextView tvRichtigFalsch;
     private Integer nVersuche = 0;
     private Spinner spWortArtFilter = null;
     DbConnection db = null;
@@ -56,10 +57,7 @@ public class AbfragenActivity extends AppCompatActivity
         rbDeutsch = findViewById(R.id.rbDeutsch);
         rbEnglisch.setClickable(true);
         rbDeutsch.setClickable(false);
-        cbHinweisEin = findViewById(R.id.cbHinweisEin);
-
         edAntwort =  findViewById(R.id.edAntwort);
-        edAntwort.setTextColor(Color.BLACK);
         btnFrage = findViewById(R.id.btnFrage);
         btnFrage.setEnabled(false);
         btnCheck = findViewById(R.id.btnCheck);
@@ -70,6 +68,8 @@ public class AbfragenActivity extends AppCompatActivity
         btnAntwortAnzeigen.setEnabled(false);
         tvVersuche = findViewById(R.id.tvAnzahVersuche);
         tvHinweis1 = findViewById(R.id.tvFrageHinweis);
+        tvRichtigFalsch = findViewById(R.id.tvRichtigFalsch);
+        tvRichtigFalsch.setText("");
         spWortArtFilter = findViewById(R.id.spFilterFrage);
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyAppPreferences", MODE_PRIVATE);
@@ -132,7 +132,9 @@ public class AbfragenActivity extends AppCompatActivity
 
     public void onFrage(View view)
     {
+        tvRichtigFalsch.setText("");
         btnFrage.setEnabled(false);
+        btnHinweis.setEnabled(true);
 
         item = db.getOneDataSetFromWordArt(this);
 
@@ -147,17 +149,13 @@ public class AbfragenActivity extends AppCompatActivity
         nVersuche = 1;
         tvVersuche.setText( nVersuche + ". Versuch");
 
-        EditText edFrage =  findViewById(R.id.edFrageWort);
-        edFrage.setBackgroundColor(Color.argb(255, 50, 50, 255));
-        edFrage.setTextColor(Color.WHITE);
-        edAntwort.setBackgroundColor(Color.YELLOW);
-        edAntwort.setTextColor(Color.BLACK);
+        TextInputEditText edFrage =  findViewById(R.id.textInputEditTextError);
         edAntwort.setText("");
         edAntwort.requestFocus();
         
         TextView tvPosition =  findViewById(R.id.tvPosition);
 
-        tvPosition.setText("Kartei (1..5): " + item.getFragePos());
+        tvPosition.setText("Karteiposition (1..5): " + item.getFragePos());
 
         if ( rbEnglisch.isChecked() )
         {
@@ -201,12 +199,9 @@ public class AbfragenActivity extends AppCompatActivity
         String sLoesungNonCapital = sLoesung.toLowerCase();
         if ( sLoesungNonCapital.indexOf(sAntw.toLowerCase()) >= 0 && !sAntw.equals(""))
         {
-            edAntwort.setBackgroundColor(Color.GREEN);
+            tvRichtigFalsch.setText("RICHTIG");
+            tvRichtigFalsch.setTextColor(Color.GREEN);
             btnCheck.setEnabled(false);
-            if (cbHinweisEin.isChecked() == false)
-            {
-                btnHinweis.setEnabled(false);
-            }
             btnAntwortAnzeigen.setEnabled(false);
             btnFrage.setEnabled(true);
 
@@ -234,7 +229,8 @@ public class AbfragenActivity extends AppCompatActivity
         }
         else
         {
-            edAntwort.setBackgroundColor(Color.RED);
+            tvRichtigFalsch.setText("FALSCH");
+            tvRichtigFalsch.setTextColor(Color.RED);
             nVersuche += 1;
             tvVersuche.setText( nVersuche + ". Versuch");
             if ( nVersuche > 2)
@@ -248,17 +244,13 @@ public class AbfragenActivity extends AppCompatActivity
             item.setFragePos(2);
             nReturn = db.update(this, item);
             btnCheck.setEnabled(false);
-            if (cbHinweisEin.isChecked() == false)
-            {
-                btnHinweis.setEnabled(false);
-            }
             btnFrage.setEnabled(false);
         }
 
         // Update testen
         if (nReturn < 1)
         {
-            Toast.makeText(this, "Update Position failed", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Frageposition: " + item.getFragePos(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -273,13 +265,20 @@ public class AbfragenActivity extends AppCompatActivity
         {
             tvHinweis1.setText(item.getHint2() == null ? "" : item.getHint2());
         }
+        if (nVersuche <5)
+        {
+            nVersuche++;
+            tvVersuche.setText( nVersuche + ". Versuch");
+        }
+        btnHinweis.setEnabled(false);
     }
 
     // Benutzer ist ungeduldig und will sofort die Antwort sehen
     public void onAntwortSofortAnzeigen(View view)
     {
+        tvRichtigFalsch.setText("");
         TextView tvPosition = findViewById(R.id.tvPosition);
-        tvPosition.setText(item.getFragePos().toString() == null ? "Kartei (1..5): " : "Kartei (1..5): " + item.getFragePos().toString());
+        tvPosition.setText(item.getFragePos().toString() == null ? "Karteiposition (1..5): " : "Karteiposition (1..5): " + item.getFragePos().toString());
 
         if (item.getFragePos() < 5)
         {
@@ -297,19 +296,12 @@ public class AbfragenActivity extends AppCompatActivity
             edAntwort.setText(item.getWort2());
             tvHinweis1.setText(item.getHint2() == null ? "" : item.getHint2());
         }
+
         db.update(this, item);
 
         btnCheck.setEnabled(false);
-        if (cbHinweisEin.isChecked())
-        {
-            btnHinweis.setEnabled(true);
-        }
         btnFrage.setEnabled(true);
         btnAntwortAnzeigen.setEnabled(false);
     }
 
-    public void onHinweisEinschalten(View view)
-    {
-            btnHinweis.setEnabled( cbHinweisEin.isChecked() ? true : false);
-    }
 }
