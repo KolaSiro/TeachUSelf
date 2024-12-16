@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
 import android.content.Context;
@@ -230,13 +231,17 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    // Daten von CSV-File in DB importieren
+
+    /** Daten von CSV-File in DB importieren
+     * @param inputStream Importstring im CSV-Format. Semicolon seperated
+     * @return Datenstring
+     */
     public String readTextFromInputStream(InputStream inputStream)
     {
         DbConnection db = DbConnection.getInstance(this);
 
         StringBuilder result = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "utf-8")))
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)))
         {
             Boolean bFirstLine = true;
             String line;
@@ -253,6 +258,7 @@ public class MainActivity extends AppCompatActivity
                 else
                 {
                     // Bsp. 1;cool;kühl;ADJ;Themperature;Themperatur
+
                     String[] item = line.split(";");
                     // Test ob es zuviele Spalten hat
                     if (item.length > 6)
@@ -267,6 +273,11 @@ public class MainActivity extends AppCompatActivity
                         itemArray[i] = item[i] != null ? item[i] : "";
                     }
 
+                    if ( itemArray[1].equals("") && itemArray[2].equals(""))
+                    {
+                        Toast.makeText(this, "eng+deut leer", Toast.LENGTH_SHORT).show();
+                        continue;
+                    }
                     Daten daten = new Daten(itemArray[1], itemArray[2], itemArray[3], itemArray[4], itemArray[5], 5);
                     try
                     {
