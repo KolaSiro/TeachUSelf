@@ -174,7 +174,10 @@ public class AbfragenActivity extends AppCompatActivity
         btnAntwortAnzeigen.setEnabled(true);
     }
 
-
+    /**
+     * Testet Frage und Antwort. Antwort wird gruen, wenn richtig sonst rot.
+     * @param view
+     */
     public void onCheck(View view)
     {
         String sAntwort = edAntwort.getText().toString();
@@ -192,7 +195,11 @@ public class AbfragenActivity extends AppCompatActivity
         long nReturn = 0;
 
         // Ist die Antwort korrekt?
-        if (sLoesung.equalsIgnoreCase(sAntwort.trim()))
+        // indeed = in der Tat, allerdings, wirklich
+        // wenn nur ein Wort richtig ist,ist es ok.
+        String sAntw = sAntwort.trim();
+        String sLoesungNonCapital = sLoesung.toLowerCase();
+        if ( sLoesungNonCapital.indexOf(sAntw.toLowerCase()) >= 0 && !sAntw.equals(""))
         {
             edAntwort.setBackgroundColor(Color.GREEN);
             btnCheck.setEnabled(false);
