@@ -232,19 +232,22 @@ public class MainActivity extends AppCompatActivity
 
 
 
-    /** Daten von CSV-File in DB importieren
+    /** Daten von CSV-File in DB importieren.
+     * 16.12.24 Counter for User added
      * @param inputStream Importstring im CSV-Format. Semicolon seperated
      * @return Datenstring
      */
     public String readTextFromInputStream(InputStream inputStream)
     {
         DbConnection db = DbConnection.getInstance(this);
+        int nCounter = 0;
 
         StringBuilder result = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)))
         {
             Boolean bFirstLine = true;
             String line;
+
             while ((line = reader.readLine()) != null)
             {
                 // CR/LF anhaengen am Schluss der Zeile
@@ -282,6 +285,7 @@ public class MainActivity extends AppCompatActivity
                     try
                     {
                         db.insert(this, daten);
+                        nCounter++;
                     }
                     catch (Exception ex)
                     {
@@ -297,6 +301,7 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this, "Error-Datenimport: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
             ex.printStackTrace();
         }
+        Toast.makeText(this, nCounter +  " added" , Toast.LENGTH_LONG).show();
         return result.toString();
     }
 
