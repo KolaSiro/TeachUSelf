@@ -1,8 +1,6 @@
 package com.example.tys;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +10,8 @@ import android.widget.Toast;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
@@ -21,20 +21,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity
 {
-    //private static final int REQUEST_CAMERA_PERMISSION = 100;
 
-    // Datenimport
-    private static final int REQUEST_STORAGE_PERMISSION = 1;
+    private static final int CREATE_FILE_REQUEST_CODE = 1;
+    private static final int OPEN_FILE_REQUEST_CODE = 2;
+    private Uri fileUri;
 
     // Datenfilterung anhand von der Wortart
     public static final String WORDART_FILTER = "WORDART_FILTER";
@@ -49,6 +47,12 @@ public class MainActivity extends AppCompatActivity
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        Button btnCreateCsv = findViewById(R.id.btnExportieren);
+        Button btnOpenCsv = findViewById(R.id.btnImport);
+
+        btnCreateCsv.setOnClickListener(v -> createCsvFile());
+        btnOpenCsv.setOnClickListener(v -> openCsvFile());
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.spWortArt), (v, insets) ->
         {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -56,87 +60,108 @@ public class MainActivity extends AppCompatActivity
             return insets;
         });
 
-        Button btnImport = findViewById(R.id.btnImport);
-
-        btnImport.setOnClickListener((v) ->
-        {
-            // Test ob zugriff auf Storage erlaubt ist
-            checkAndRequestPermission();
-
-
-            // Android oeffnet ein Fenster damit der User eine Datei auswaehlen kann.
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            //intent.setType("text/csv"); // Filter für CSV-Dateien
-            intent.setType("*/*"); // Filter für alles
-            startActivityForResult(intent, REQUEST_STORAGE_PERMISSION);
-        });
-
         // Testdaten erzeugen, wenn DB leer ist
         insertTestData(DbConnection.getInstance(this));
 
-        /////////////////////////////////////////////////////////////////////////////////////////////
-        // Code Beispiele fuer User-Preferences
-        /////////////////////////////////////////////////////////////////////////////////////////////
-
-        //SharedPreferences sharedPreferences = getSharedPreferences("MyAppPreferences", MODE_PRIVATE);
-        // Editor zum Schreiben von Werten erstellen
-        //SharedPreferences.Editor editor = sharedPreferences.edit();
-        //editor.putString("wortart", "Noun"); // Wortart
-        //editor.putInt("position", 1); // Karteiposition
-        // editor.putBoolean("englisch", true); // Deutsch oder Englisch
-//        final String[] werteArray =  getResources().getStringArray(R.array.anzeigen_sortierung_anzeige);
-//        final String sID_ASC = werteArray[0];
+//        /////////////////////////////////////////////////////////////////////////////////////////////
+//        // Code Beispiele fuer User-Preferences
+//        /////////////////////////////////////////////////////////////////////////////////////////////
 //
-//        editor.putString(ANZEIGE_SORTIERUNG, sID_ASC); // ASC id default
-//        editor.commit(); // synchron
+//        //SharedPreferences sharedPreferences = getSharedPreferences("MyAppPreferences", MODE_PRIVATE);
+//        // Editor zum Schreiben von Werten erstellen
+//        //SharedPreferences.Editor editor = sharedPreferences.edit();
+//        //editor.putString("wortart", "Noun"); // Wortart
+//        //editor.putInt("position", 1); // Karteiposition
+//        // editor.putBoolean("englisch", true); // Deutsch oder Englisch
+////        final String[] werteArray =  getResources().getStringArray(R.array.anzeigen_sortierung_anzeige);
+////        final String sID_ASC = werteArray[0];
+////
+////        editor.putString(ANZEIGE_SORTIERUNG, sID_ASC); // ASC id default
+////        editor.commit(); // synchron
     }
 
-    private void checkAndRequestPermission() {
-
-        // Überprüfen, ob die Berechtigung bereits erteilt wurde
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-        {
-            // Berechtigung wurde noch nicht erteilt, anfordern
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
-        }
-        else
-        {
-            // Berechtigung ist bereits vorhanden
-            Toast.makeText(this, "Storage-Berechtigung bereits erteilt", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    // Methode zum Erstellen und Schreiben einer CSV-Datei
+    private void createCsvFile()
     {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("text/csv");
+        intent.putExtra(Intent.EXTRA_TITLE, "_TUS_export.csv");
+        startActivityForResult(intent, CREATE_FILE_REQUEST_CODE);
+    }
 
-        if (requestCode == REQUEST_STORAGE_PERMISSION)
-        {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
-                Toast.makeText(this, "Storage-Berechtigung erteilt", Toast.LENGTH_SHORT).show();
-            }
-        }
+    // Methode zum Öffnen und Lesen einer CSV-Datei
+    private void openCsvFile()
+    {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("text/csv");
+        startActivityForResult(intent, OPEN_FILE_REQUEST_CODE);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_STORAGE_PERMISSION && resultCode == RESULT_OK)
-        {
-            // Uri hat auch den genauen Pfad der Datei
-            Uri fileUri = data.getData();
-            if (fileUri != null)
+
+        if (resultCode == RESULT_OK && data != null && data.getData() != null) {
+            fileUri = data.getData();
+
+            if (requestCode == CREATE_FILE_REQUEST_CODE)
             {
-                importCsvToDatabase(this, fileUri);
+                writeCsvData(fileUri);
+            }
+            else if (requestCode == OPEN_FILE_REQUEST_CODE)
+            {
+                readCsvData(fileUri);
             }
         }
-        else
+    }
+
+    // CSV-Daten lesen
+    private void readCsvData(Uri uri)
+    {
+        try
         {
-            Toast.makeText(this, "Storage-Berechtigung verweigert", Toast.LENGTH_SHORT).show();
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+            readTextFromInputStream(inputStream);
+        }
+        catch (Exception ex)
+        {
+            Log.e("TYS", "Fehler beim Lesen der Datei", ex);
+            Toast.makeText(this, "Lesefehler: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // CSV-Daten schreiben
+    private void writeCsvData(Uri uri)
+    {
+        DbConnection db = DbConnection.getInstance(this);
+        ArrayList<Daten> daten = db.getDaten(this, -1);
+        String sExport = "";
+        int i = 0;
+        for ( ;i < daten.size(); i++)
+        {
+            Daten item = daten.get(i);
+            sExport += item.getId() + ";" + item.getWort1() + ";" + item.getWort2() + ";"
+                    + item.getArt() + ";" + item.getHint1() + ";" + item.getHint2() + ";"
+                    + item.getFragePos() + "\n";
+        }
+
+        String csvContent =  sExport;
+
+        try (OutputStream outputStream = getContentResolver().openOutputStream(uri))
+        {
+            if (outputStream != null)
+            {
+                outputStream.write(csvContent.getBytes(StandardCharsets.UTF_8));
+                Toast.makeText(this, "CSV-Datei mit " + i + " Daten erstellt.", Toast.LENGTH_LONG).show();
+            }
+        }
+        catch (Exception e)
+        {
+            Log.e("MainActivity", "Fehler beim Schreiben der Datei", e);
+            Toast.makeText(this, "Fehler beim Schreiben der Datei", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -237,8 +262,6 @@ public class MainActivity extends AppCompatActivity
         btnAllesNeuMischen.setEnabled(false);
     }
 
-
-
     /** Daten von CSV-File in DB importieren.
      * 16.12.24 Counter for User added
      * @param inputStream Importstring im CSV-Format. Semicolon seperated
@@ -271,12 +294,12 @@ public class MainActivity extends AppCompatActivity
 
                     String[] item = line.split(";");
                     // Test ob es zuviele Spalten hat
-                    if (item.length > 6)
+                    if (item.length > 7)
                     {
-                        Log.e("TYS", "Import-Zeile hat zu viele Spalten. Max. 6");
+                        Log.e("TYS", "Import-Zeile hat zu viele Spalten. Max. 7");
                         continue;
                     }
-                    String[] itemArray = {"", "", "", "", "", ""};
+                    String[] itemArray = {"", "", "", "", "", "", ""};
 
                     for (int i = 0; i < item.length; i++)
                     {
@@ -288,7 +311,7 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(this, "eng+deut leer", Toast.LENGTH_SHORT).show();
                         continue;
                     }
-                    Daten daten = new Daten(itemArray[1], itemArray[2], itemArray[3], itemArray[4], itemArray[5], 5);
+                    Daten daten = new Daten(-1, itemArray[1], itemArray[2], itemArray[3], itemArray[4], itemArray[5], 5);
                     try
                     {
                         db.insert(this, daten);
@@ -308,23 +331,7 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this, "Error-Datenimport: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
             ex.printStackTrace();
         }
-        Toast.makeText(this, nCounter +  " added" , Toast.LENGTH_LONG).show();
+        Toast.makeText(this, nCounter +  " Daten importiert." , Toast.LENGTH_LONG).show();
         return result.toString();
-    }
-
-    public void importCsvToDatabase(Context context, Uri csvFilePath)
-    {
-        try (InputStream inputStream = getContentResolver().openInputStream(csvFilePath))
-        {
-            // InputStream an lese Funktion uebergeben und darin in DB speichern
-            String sText = readTextFromInputStream(inputStream);
-            int i = 0; // debug only
-        }
-        catch (IOException ex)
-        {
-            Log.e("TYS", "Import-File: Inputstream fehlerhaft: " + ex.getMessage());
-            Toast.makeText(this, "InputStream failed" + ex.getMessage(), Toast.LENGTH_SHORT).show();
-            ex.printStackTrace();
-        }
     }
 }

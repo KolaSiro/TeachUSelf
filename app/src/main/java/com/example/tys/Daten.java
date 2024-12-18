@@ -7,13 +7,13 @@ import java.io.Serializable;
  */
 public class Daten implements Serializable
 {
-   private int id;
-   private String wort1;
-   private String wort2;
-   private String art;
-   private String hint1;
-   private String hint2;
-   private Integer fragePos;
+   private int id = -1;
+   private String wort1 = "";
+   private String wort2 = "";
+   private String art = "";
+   private String hint1 = "";
+   private String hint2 = "";
+   private Integer fragePos = 5;
 
    public Daten()
    {
