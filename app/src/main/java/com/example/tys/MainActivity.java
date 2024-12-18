@@ -158,11 +158,18 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    /**
+     * Fuegt standard Daten ein, wenn die Datenbank leer ist
+     * @param db Datenbank Handle
+     * 2024.12.18 Datenbank check verbessert.
+     */
     private void insertTestData(DbConnection db)
     {
-        if ( db.getDaten(this, -1).size() > 0)
+        if ( db.getDatenAnzahl(this) > 0)
         {
-            return; // Daten sind schon importiert
+            // Daten sind schon importiert
+            // Wir wollen die Kundendaten NICHT ueberschreiben
+            return;
         }
 
         try
