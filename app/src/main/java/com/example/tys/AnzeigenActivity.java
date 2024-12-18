@@ -142,12 +142,16 @@ public class AnzeigenActivity extends AppCompatActivity
     /**
      * Holt die Daten aus der Datenbank und zeigt sie in der
      * ListView an.
+     * 18.12.2024 Anzahl anzeigen impl.
      */
     private void showDaten()
     {
         daten.clear();
         DbConnection conn = DbConnection.getInstance(this);
         daten = conn.getDaten(this, -1);
+
+        Toast.makeText(getApplicationContext(),
+                "Anzahl: " + daten.size(), Toast.LENGTH_SHORT).show();
 
         ArrayAdapter<Daten> adapter = new ArrayAdapter<Daten> (this, android.R.layout.simple_list_item_2, android.R.id.text1, daten) {
 
@@ -159,7 +163,7 @@ public class AnzeigenActivity extends AppCompatActivity
                 TextView text1 = (TextView) view.findViewById(android.R.id.text1);
                 TextView text2 = (TextView) view.findViewById(android.R.id.text2);
 
-                text1.setText(daten.get(position).getWort1() + " : " + daten.get(position).getHint1() + " Pos: " + daten.get(position).getFragePos());
+                text1.setText(daten.get(position).getWort1() + " : " + daten.get(position).getHint1() + " ID: " + daten.get(position).getId());
                 text2.setText(daten.get(position).getWort2() + " : " + daten.get(position).getHint2() + " Art: " + daten.get(position).getArt());
 
                 return view;

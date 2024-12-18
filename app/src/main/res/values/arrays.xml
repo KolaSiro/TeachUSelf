@@ -1,25 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!--    <array name="wortart_anzeige">-->
-<!--        <item>Not Specified</item>-->
-<!--        <item>Noun</item>-->
-<!--        <item>Verb</item>-->
-<!--        <item>Adjective</item>-->
-<!--        <item>Adverb</item>-->
-<!--        <item>Idiom</item>-->
-<!--        <item>Sentence</item>-->
-<!--    </array>-->
-
-<!--    <string-array name="wordart_werte">-->
-<!--        <item>NOT_SPECIFIED</item>-->
-<!--        <item>NOUN</item>-->
-<!--        <item>VERB</item>-->
-<!--        <item>ADJ</item>-->
-<!--        <item>ADV</item>-->
-<!--        <item>IDIOM</item>-->
-<!--        <item>SENTENCE</item>-->
-<!--    </string-array>-->
-
     <string-array name="wordarten">
     <item>NOT_SPECIFIED</item>
     <item>NOUN</item>
@@ -34,11 +14,31 @@
     <array name="anzeigen_sortierung_anzeige">
         <item>id ASC</item>
         <item>id DESC</item>
+        <item>ENG ASC</item>
+        <item>ENG DESC</item>
+        <item>WORTART NOT_SPECIFIED ASC</item>
+        <item>IDIOM ASC</item>
+        <item>NOUN ASC</item>
+        <item>ADJECTIVE ASC</item>
+        <item>VERB ASC</item>
+        <item>ADVERB ASC</item>
+        <item>SENTENCE ASC</item>
+        <item>Englisch ist leer ASC</item>
+
     </array>
 
     <string-array name="anzeigen_sortierung_werte">
-        <item>order by id ASC</item>
-        <item>order by id DESC</item>
-
+        <item>"order by id ASC"</item>
+        <item>"order by id DESC"</item>
+        <item>"order by wort1 COLLATE NOCASE ASC"</item>
+        <item>"order by wort1 COLLATE NOCASE DESC"</item>
+        <item>" WHERE wordart = 'NOT_SPECIFIED' ORDER BY wort1 COLLATE NOCASE ASC"</item>
+        <item>" WHERE wordart = 'IDIOM' ORDER BY wort1 COLLATE NOCASE ASC"</item>
+        <item>" WHERE wordart = 'NOUN' ORDER BY wort1 COLLATE NOCASE ASC"</item>
+        <item>" WHERE wordart = 'ADJECTIVE' ORDER BY wort1 COLLATE NOCASE ASC"</item>
+        <item>" WHERE wordart = 'VERB' ORDER BY wort1 COLLATE NOCASE ASC"</item>
+        <item>" WHERE wordart = 'ADVERB' ORDER BY wort1 COLLATE NOCASE ASC"</item>
+        <item>" WHERE wordart = 'SENTENCE' ORDER BY wort1 COLLATE NOCASE ASC"</item>
+        <item>" WHERE wort1 = '' ORDER BY id ASC"</item>
     </string-array>
 </resources>
