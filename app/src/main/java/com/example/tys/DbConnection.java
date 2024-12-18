@@ -140,6 +140,14 @@ public class DbConnection extends SQLiteOpenHelper
       return nResult >= 1;
    }
 
+   public int getDatenAnzahl(Context context)
+   {
+      DbConnection conn = getInstance(context);
+      SQLiteDatabase db = conn.getReadableDatabase();
+      Cursor cur = db.rawQuery("SELECT * FROM TDaten ", null);
+      return cur.getCount();
+   }
+
    /**
     * Liefert anhand der ID die Daten
     * @param context Context
@@ -170,7 +178,10 @@ public class DbConnection extends SQLiteOpenHelper
       }
       else
       {
-         sOrderBy = anzeigeWerte[nPos];
+         if ( nPos < anzeigePositionen.length)
+         {
+            sOrderBy = anzeigeWerte[nPos];
+         }
       }
 
       ArrayList<Daten> daten = new ArrayList<>();
