@@ -275,6 +275,11 @@ public class MainActivity extends AppCompatActivity
         StringBuilder result = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)))
         {
+
+            // Test ob der Datensatz schon lokal vorhanden ist
+            ArrayList<Daten> datenDic = db.getDaten(this, -1);
+            int nSize = datenDic.size();
+
             Boolean bFirstLine = true;
             String line;
 
@@ -311,7 +316,31 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(this, "eng+deut leer", Toast.LENGTH_SHORT).show();
                         continue;
                     }
-                    Daten daten = new Daten(-1, itemArray[1], itemArray[2], itemArray[3], itemArray[4], itemArray[5], 5);
+
+
+                    boolean bAlreadyInDictionary = false;
+
+                    for(int j = 0; j < nSize; j++)
+                    {
+                        if ( itemArray[1].equals(datenDic.get(j).getWort1()))
+                        {
+                            // Datensatz schon vorhanden also ignorieren
+                            bAlreadyInDictionary = true;
+                        }
+                    }
+
+                    if (bAlreadyInDictionary)
+                    {
+                        continue;
+                    }
+
+                    // Test ob Wordart leer ist, was zwar erlaubt waere.
+                    String sWordArtText = itemArray[3];
+                    if ( sWordArtText.equals(""))
+                    {
+                        sWordArtText = "NOT_SPECIFIED";
+                    }
+                    Daten daten = new Daten(-1, itemArray[1], itemArray[2], sWordArtText, itemArray[4], itemArray[5], 5);
                     try
                     {
                         db.insert(this, daten);
