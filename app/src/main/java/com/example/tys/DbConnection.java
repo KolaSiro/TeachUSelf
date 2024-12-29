@@ -11,8 +11,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Random;
 
-import androidx.annotation.NonNull;
-
 import static android.content.Context.MODE_PRIVATE;
 
 public class DbConnection extends SQLiteOpenHelper
@@ -48,19 +46,8 @@ public class DbConnection extends SQLiteOpenHelper
    @Override
    public void onCreate(SQLiteDatabase db)
    {
-//      try
-//      {
-         db.execSQL(DatenTabelle.SQL_CREATE);
- //     }
-//      catch (SQLException e)
-//      {
-//         //Toast.makeText(getApplicationContext(), "Pos: " + iPos + " " + item.getWort1() + " = " + item.getWort2()  + " id="  + id, Toast.LENGTH_SHORT).show();
-//         throw new RuntimeException(e);
-//      }
-//      catch (Exception ex)
-//      {
-//         throw new RuntimeException(ex);
-//      }
+      // Tabelle wird in SqLite erzeugt
+      db.execSQL(DatenTabelle.SQL_CREATE);
    }
 
    @Override
@@ -140,6 +127,11 @@ public class DbConnection extends SQLiteOpenHelper
       return nResult >= 1;
    }
 
+   /**
+    * Liefert die Anzahl der Datensaetze in der Datenbank
+    * @param context
+    * @return Anzahl der Datensaetze
+    */
    public int getDatenAnzahl(Context context)
    {
       DbConnection conn = getInstance(context);
@@ -215,6 +207,11 @@ public class DbConnection extends SQLiteOpenHelper
       return daten;
    }
 
+   /**
+    * Liefert 1 Datensatz anhand der Wortart: NOUN, VERB, etc.
+    * @param context
+    * @return 1 Datensatz
+    */
    public Daten getOneDataSetFromWordArt(Context context)
    {
       SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPreferences", MODE_PRIVATE);
