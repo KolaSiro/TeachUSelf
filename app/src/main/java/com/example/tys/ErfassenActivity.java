@@ -119,7 +119,6 @@ public class ErfassenActivity extends AppCompatActivity
         String sHin1 = edHin1.getText().toString();
         String sHin2 = edHin2.getText().toString();
 
-
         final Spinner spWortArt = findViewById(R.id.spWordArt );
         final int pos = spWortArt.getSelectedItemPosition();
         final String[] werteArray =  getResources().getStringArray(R.array.wordarten);

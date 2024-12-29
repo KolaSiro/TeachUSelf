@@ -11,11 +11,9 @@ import android.widget.Toast;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Random;
-import android.content.Context;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,7 +27,6 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity
 {
-
     private static final int CREATE_FILE_REQUEST_CODE = 1;
     private static final int OPEN_FILE_REQUEST_CODE = 2;
     private Uri fileUri;
@@ -295,6 +292,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 else
                 {
+                    // ID;wort1;wort2;wordart;hinweis1;hinweis2;position
                     // Bsp. 1;cool;kühl;ADJ;Themperature;Themperatur
 
                     String[] item = line.split(";");
