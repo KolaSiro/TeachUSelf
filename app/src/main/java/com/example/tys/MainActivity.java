@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.io.InputStream;
@@ -239,8 +240,37 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Mischt alles neu und entfernt doppelte Eintraege
+     * @param view
+     */
     public void onAllesNeuMischen(View view)
     {
+
+        RemoveDoubleEntriesInDB();
+
+//        ProgressBar progressBar = findViewById(R.id.progressBarMain);
+//
+//        // Fortschrittsanzeige aktivieren
+//        progressBar.setVisibility(View.VISIBLE);
+//
+//        // Länger dauernder Vorgang im Hintergrund
+//        new Thread(() -> {
+//
+//            try
+//            {
+//                Thread.sleep(3000);
+//            }
+//            catch (InterruptedException e)
+//            {
+//                throw new RuntimeException(e);
+//            }
+//
+//            // Fortschrittsanzeige nach Abschluss verstecken
+//            runOnUiThread(() -> progressBar.setVisibility(View.GONE));
+//        }).start();
+
+
         DbConnection db = DbConnection.getInstance(this);
         ArrayList<Daten> daten = db.getDaten(this, -1);
         int nAnzahlFragen = daten.size();
@@ -257,6 +287,58 @@ public class MainActivity extends AppCompatActivity
         }
         Button btnAllesNeuMischen = findViewById(R.id.btnNeuMischen);
         btnAllesNeuMischen.setEnabled(false);
+    }
+
+    // entfernt alle doppelten Eintraege aus der DB
+    private void RemoveDoubleEntriesInDB()
+    {
+        DbConnection db = DbConnection.getInstance(this);
+        ArrayList<Daten> datenAlt = db.getDaten(this, -1);
+        ArrayList<Daten> datenNeu = new ArrayList<>();
+
+        datenNeu.add(datenAlt.get(0));
+
+        int nAnzahlAlt = datenAlt.size();
+        int nAlreadyThere = -1;
+        for(int i = 0; i < nAnzahlAlt; i++)
+        {
+            int nAnzahlNeu = datenNeu.size();
+
+            boolean bIsAlreadyThere = false;
+
+            for(int j = 0; j < nAnzahlNeu; j++ )
+            {
+                if (datenNeu.get(j).getWort1().equals(datenAlt.get(i).getWort1()))
+                {
+                    // identisch, ist schon vorhanden
+                    bIsAlreadyThere = true;
+                    ++nAlreadyThere;
+                }
+            }
+            if (bIsAlreadyThere == false)
+            {
+                datenNeu.add(datenAlt.get(i));
+            }
+        }
+
+        int nTotalNeu = datenNeu.size();
+        if ( db.delete(this, -1))
+        {
+            // alte Daten loeschen
+            for(int k = 0; k < nTotalNeu; k++)
+            {
+                try
+                {
+                    db.insert(this, datenNeu.get(k));
+                }
+                catch (Exception ex)
+                {
+                    Log.e("TYS", "Daten INSERT failed: " + ex.getMessage());
+                }
+            }
+        }
+
+        Toast.makeText(this, nAlreadyThere +  " waren doppelt." , Toast.LENGTH_LONG).show();
     }
 
     /** Daten von CSV-File in DB importieren.
@@ -314,7 +396,6 @@ public class MainActivity extends AppCompatActivity
                         Toast.makeText(this, "eng+deut leer", Toast.LENGTH_SHORT).show();
                         continue;
                     }
-
 
                     boolean bAlreadyInDictionary = false;
 
