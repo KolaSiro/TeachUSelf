@@ -115,7 +115,8 @@ public class DbConnection extends SQLiteOpenHelper
    }
 
    /**
-    * Löscht einen Datensatz aus der Tabelle
+    * Löscht einen Datensatz aus der Tabelle, oder alle wenn als
+    * id -1 uebergeben wird
     * @param context Context
     * @param id Primary Key
     * @return true, wenn erfolgreich gelöscht, sonst false
@@ -123,7 +124,15 @@ public class DbConnection extends SQLiteOpenHelper
    public boolean delete(Context context, int id)
    {
       SQLiteDatabase db = getInstance(context).getWritableDatabase();
-      int nResult = db.delete("TDaten", "id=" + id, null);
+      int nResult = 0;
+      if ( id == -1)
+      {
+         nResult = db.delete("TDaten", "id != -1 ", null);
+      }
+      else
+      {
+         nResult = db.delete("TDaten", "id=" + id, null);
+      }
       return nResult >= 1;
    }
 

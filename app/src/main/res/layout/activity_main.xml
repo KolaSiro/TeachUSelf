@@ -46,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onAllesNeuMischen"
-        android:text="Alles neu Mischen"
+        android:text="Mischen u. doppelte löschen"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnAllesAnzeigen" />
@@ -61,6 +61,15 @@
         app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnNeuMischen" />
+
+    <Button
+        android:id="@+id/btnExportieren"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="csv-Daten-Export"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnImport" />
 
     <ImageView
         android:id="@+id/imgLogo"
@@ -105,15 +114,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btnExportieren"
+    <ProgressBar
+        android:id="@+id/progressBarMain"
+        style="?android:attr/progressBarStyleLarge"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="csv-Daten-Export"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.511"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnImport" />
+        app:layout_constraintTop_toBottomOf="@+id/btnExportieren" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
