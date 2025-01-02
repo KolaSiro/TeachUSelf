@@ -205,6 +205,7 @@ public class MainActivity extends AppCompatActivity
             final String ADVERB = getResources().getStringArray(R.array.wordarten)[4]; // Adverb
             final String IDIOM = getResources().getStringArray(R.array.wordarten)[5]; // Redewendung
             final String SENTENCE = getResources().getStringArray(R.array.wordarten)[6]; // ganzer oder Teilsatz
+            final String ABBREVIATION = getResources().getStringArray(R.array.wordarten)[7]; // Abkuerzung
 
             // Daten fuer Import, damit die DB am Anfang nicht leer ist.
             db.insert(this, new Daten("Hello", "Hallo", NOT_SPECIFIED, "greeting", "Begrüssung", 3));
@@ -233,6 +234,7 @@ public class MainActivity extends AppCompatActivity
             db.insert(this, new Daten("yesterday", "gestern" , ADVERB, "", "Zeitpunkt", 2));
             db.insert(this, new Daten("often", "oft" , ADVERB, "", "Wiederholung", 2));
             db.insert(this, new Daten("dayly", "täglich" , ADVERB, "", "Zeitpunkt", 2));
+            db.insert(this, new Daten("BMJ", "Britisches Medizin Journal" , ABBREVIATION, "", "Medizin", 2));
         }
         catch( Exception ex)
         {
