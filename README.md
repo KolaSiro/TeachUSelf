@@ -1,9 +1,11 @@
-- TEACH YOU SELF
-- ==============
+- TEACH YOU SELF Version 1.7.1 (20250205)
+- =======================================
 - Android Studio Project
-- SDK 34
-- Programming in Java
-- English -> German question and answer
-- Adding new english and german words and test your translation
+- SDK 35
+- Java 11 programming language
+- English -> German question and answer dictionary, no internet connection used
+- Adding new english and german words and test your brain
 - Dictionary is local on the smartphone
-- Import and export of local dictionary
+- File import to local dictionary [csv UTF-8]. Import format: wort1,wort2,wordart,hinweis1,heinweis2
+- File export to device-filesystem [csv UTF-8]
+- Wordart: NOUN, VERB, ADJECTIVE, ADVERB, SENTENCE, IDIOM, INFORMAL, ABBREVIATION
