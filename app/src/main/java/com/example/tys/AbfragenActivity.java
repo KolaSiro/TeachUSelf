@@ -35,6 +35,7 @@ public class AbfragenActivity extends AppCompatActivity
     private EditText edAntwort ;
     private TextView tvVersuche;
     private TextView tvHinweis1;
+    private TextView tvHinweis2;
     private TextView tvRichtigFalsch;
     private Integer nVersuche = 0;
     private Spinner spWortArtFilter = null;
@@ -68,6 +69,7 @@ public class AbfragenActivity extends AppCompatActivity
         btnAntwortAnzeigen.setEnabled(false);
         tvVersuche = findViewById(R.id.tvAnzahVersuche);
         tvHinweis1 = findViewById(R.id.tvFrageHinweis);
+        tvHinweis2 = findViewById(R.id.tvHinweisDeutschAbfrage);
         tvRichtigFalsch = findViewById(R.id.tvRichtigFalsch);
         tvRichtigFalsch.setText("");
         spWortArtFilter = findViewById(R.id.spFilterFrage);
@@ -145,6 +147,7 @@ public class AbfragenActivity extends AppCompatActivity
         }
 
         tvHinweis1.setText("");
+        tvHinweis2.setText("");
 
         nVersuche = 1;
         tvVersuche.setText( nVersuche + ". Versuch");
@@ -257,14 +260,9 @@ public class AbfragenActivity extends AppCompatActivity
     // Hinweis zur Frage einblenden
     public void onHinweisClicked(View view)
     {
-        if ( rbEnglisch.isChecked() )
-        {
-            tvHinweis1.setText(item.getHint1() == null ? "" : item.getHint1());
-        }
-        else
-        {
-            tvHinweis1.setText(item.getHint2() == null ? "" : item.getHint2());
-        }
+        tvHinweis1.setText(item.getHint1() == null ? "" : item.getHint1());
+        tvHinweis2.setText(item.getHint2() == null ? "" : item.getHint2());
+
         if (nVersuche <5)
         {
             nVersuche++;
@@ -286,16 +284,9 @@ public class AbfragenActivity extends AppCompatActivity
         }
 
         // Loesung, Hinweis und Position anzeigen zur Hilfe
-        if ( rbEnglisch.isChecked() )
-        {
-            edAntwort.setText(item.getWort2());
-            tvHinweis1.setText(item.getHint1() == null ? "" : item.getHint1());
-        }
-        else
-        {
-            edAntwort.setText(item.getWort2());
-            tvHinweis1.setText(item.getHint2() == null ? "" : item.getHint2());
-        }
+        edAntwort.setText(item.getWort2());
+        tvHinweis1.setText(item.getHint1() == null ? "" : item.getHint1());
+        tvHinweis2.setText(item.getHint2() == null ? "" : item.getHint2());
 
         db.update(this, item);
 

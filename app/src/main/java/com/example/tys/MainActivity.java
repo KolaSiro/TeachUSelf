@@ -206,6 +206,7 @@ public class MainActivity extends AppCompatActivity
             final String IDIOM = getResources().getStringArray(R.array.wordarten)[5]; // Redewendung
             final String SENTENCE = getResources().getStringArray(R.array.wordarten)[6]; // ganzer oder Teilsatz
             final String ABBREVIATION = getResources().getStringArray(R.array.wordarten)[7]; // Abkuerzung
+            final String INFORMAL = getResources().getStringArray(R.array.wordarten)[8]; // Informal
 
             // Daten fuer Import, damit die DB am Anfang nicht leer ist.
             db.insert(this, new Daten("Hello", "Hallo", NOT_SPECIFIED, "greeting", "Begrüssung", 3));
@@ -235,6 +236,7 @@ public class MainActivity extends AppCompatActivity
             db.insert(this, new Daten("often", "oft" , ADVERB, "", "Wiederholung", 2));
             db.insert(this, new Daten("dayly", "täglich" , ADVERB, "", "Zeitpunkt", 2));
             db.insert(this, new Daten("BMJ", "Britisches Medizin Journal" , ABBREVIATION, "", "Medizin", 2));
+            db.insert(this, new Daten("snout", "Nase, Cigarette, Polizeiinformant, verdeckter Ermittler" , INFORMAL, "", "Slang", 2));
         }
         catch( Exception ex)
         {
@@ -310,9 +312,11 @@ public class MainActivity extends AppCompatActivity
 
             for(int j = 0; j < nAnzahlNeu; j++ )
             {
-                if (datenNeu.get(j).getWort1().equals(datenAlt.get(i).getWort1()))
+                if (datenNeu.get(j).getWort1().equals(datenAlt.get(i).getWort1())
+                        && datenNeu.get(j).getArt().equals(datenAlt.get(i).getArt()))
                 {
-                    // identisch, ist schon vorhanden
+                    // identisch, wort1 mit gleicher Wortart ist schon vorhanden
+                    // d.h. churn gibt es z.B. als Verb und als Noun
                     bIsAlreadyThere = true;
                     ++nAlreadyThere;
                 }
