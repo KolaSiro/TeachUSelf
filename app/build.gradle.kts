@@ -4,14 +4,14 @@ plugins {
 
 android {
     namespace = "com.example.tys"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.tys"
         minSdk = 28
         targetSdk = 34
         versionCode = 1
-        versionName = "1.7.0"
+        versionName = "1.7.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -29,7 +29,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    buildToolsVersion = "34.0.0"
+    buildToolsVersion = "35.0.0"
 }
 
 dependencies {

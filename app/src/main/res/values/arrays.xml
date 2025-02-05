@@ -9,6 +9,7 @@
     <item>IDIOM</item>
     <item>SENTENCE</item>
     <item>ABBREVIATION</item>
+    <item>INFORMAL</item>
 
 </string-array>
 
@@ -25,6 +26,7 @@
         <item>ADVERB ASC</item>
         <item>SENTENCE ASC</item>
         <item>ABBREVIATION ASC</item>
+        <item>INFORMAL ASC</item>
         <item>Englisch ist leer ASC</item>
 
     </array>
@@ -42,6 +44,7 @@
         <item>" WHERE wordart = 'ADVERB' ORDER BY wort1 COLLATE NOCASE ASC"</item>
         <item>" WHERE wordart = 'SENTENCE' ORDER BY wort1 COLLATE NOCASE ASC"</item>
         <item>" WHERE wordart = 'ABBREVIATION' ORDER BY wort1 COLLATE NOCASE ASC"</item>
+        <item>" WHERE wordart = 'INFORMAL' ORDER BY wort1 COLLATE NOCASE ASC"</item>
         <item>" WHERE wort1 = '' ORDER BY id ASC"</item>
     </string-array>
 </resources>

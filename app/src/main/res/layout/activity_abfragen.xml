@@ -24,28 +24,24 @@
 
     <Button
         android:id="@+id/btnAntwortSofortAnzeigen"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onAntwortSofortAnzeigen"
         android:text="Antwort sofort anzeigen"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnCheck" />
+        app:layout_constraintTop_toBottomOf="@+id/tvHinweisDeutschAbfrage" />
 
 
     <Button
         android:id="@+id/btnCheck"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onCheck"
         android:text="Check"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edAntwortLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/tvHinweisDeutschAbfrage" />
 
 
     <Button
@@ -81,8 +77,8 @@
 
     <EditText
         android:id="@+id/tvFrageHinweis"
-        android:layout_width="377dp"
-        android:layout_height="48dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:hint="Hinweis"
         android:inputType="textMultiLine"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -214,6 +210,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnHinweisAnzeigen"
         app:layout_constraintTop_toBottomOf="@+id/tvFrageHinweis" />
+
+    <EditText
+        android:id="@+id/tvHinweisDeutschAbfrage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Hinweis"
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edAntwortLayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

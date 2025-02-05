@@ -29,9 +29,7 @@
         android:layout_marginTop="8dp"
         android:onClick="onSpeichernFertig"
         android:text="Speichern, fertig"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.473"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnSpeicherNext" />
 
@@ -39,11 +37,12 @@
         android:id="@+id/btnLoeschen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:onClick="onLoeschen"
         android:text="Löschen"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSpeichernFertig" />
+        app:layout_constraintTop_toBottomOf="@+id/btnSpeicherNext" />
 
     <EditText
         android:id="@+id/edEnglischerfassen"

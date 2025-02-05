@@ -263,6 +263,10 @@ public class DbConnection extends SQLiteOpenHelper
       Cursor cur = db.rawQuery(sql, null);
 
       int nRowCount = cur.getCount();
+      if (nRowCount < 1)
+      {
+         return  new Daten("[no words available]", "[keine Wörter vorhanden]", "", "no words from wordart", "Keine Wörter in dieser Wortart", -1 );
+      }
       Random rand = new Random();
 
       // Generate random integers in range nRowCount
